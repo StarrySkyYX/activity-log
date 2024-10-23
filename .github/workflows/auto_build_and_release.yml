@@ -1,74 +1,74 @@
-name: auto_build_and_release
+# name: auto_build_and_release
 
-on:
-  pull_request: 
-    branches: master
+# on:
+#   pull_request: 
+#     branches: master
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - name: Build
-        run: |
-          npm i -g @vercel/ncc
-          npm i @actions/github
-          npm run build
-      - name: Commit
-        run: |
-          git config --global user.name 'StarrySkyYX'
-          git config --global user.email 's1447891024@gmail.com'
-          git commit -am "dist build"
-          git push
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     defaults:
+#       run:
+#         shell: bash
+#     steps:
+#       - uses: actions/checkout@v4
+#       - name: Set up Node
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: 20
+#       - name: Build
+#         run: |
+#           npm i -g @vercel/ncc
+#           npm i @actions/github
+#           npm run build
+#       - name: Commit
+#         run: |
+#           git config --global user.name 'StarrySkyYX'
+#           git config --global user.email 's1447891024@gmail.com'
+#           git commit -am "dist build"
+#           git push
 
-  test:
-    runs-on: ubuntu-latest
-    needs: build
-    defaults:
-      run:
-        shell: bash
-    steps:
-      - uses: actions/checkout@v4
-      - name: Test index.js
-        env:
-          INPUT_GITHUB_USERNAME: "StarrySkyYX"
-          INPUT_GITHUB_TOKEN: ${{ secrets.ACTIONSECRET2024 }}
-          INPUT_TARGET_REPOS: '[StarrySkyYX/activity-log]'
-          INPUT_OUTPUT_STYLE: MARKDOWN
-          INPUT_IGNORE_EVENTS: '[]'
-          INPUT_README_PATH: README.md
-          INPUT_COMMIT_MESSAGE: Update README.md
-          INPUT_EVENT_LIMIT: '100'
-        run: node ./dist/index.js
+#   test:
+#     runs-on: ubuntu-latest
+#     needs: build
+#     defaults:
+#       run:
+#         shell: bash
+#     steps:
+#       - uses: actions/checkout@v4
+#       - name: Test index.js
+#         env:
+#           INPUT_GITHUB_USERNAME: "StarrySkyYX"
+#           INPUT_GITHUB_TOKEN: ${{ secrets.ACTIONSECRET2024 }}
+#           INPUT_TARGET_REPOS: '[StarrySkyYX/activity-log]'
+#           INPUT_OUTPUT_STYLE: MARKDOWN
+#           INPUT_IGNORE_EVENTS: '[]'
+#           INPUT_README_PATH: README.md
+#           INPUT_COMMIT_MESSAGE: Update README.md
+#           INPUT_EVENT_LIMIT: '100'
+#         run: node ./dist/index.js
 
-  release:
-    runs-on: ubuntu-latest
-    needs: test
-    steps:
-      - uses: actions/checkout@v4
-      - name: Pull latest
-        run: |
-          git config --global user.name 'StarrySkyYX'
-          git config --global user.email 's1447891024@gmail.com'
-          git pull
-      - name: Tag it
-        run: |
-          git tag -a "v1.0.0-${{ github.run_number }}" -m "Release for PR #${{ github.event.number }}" master
-          git push --tags
-      - name: Release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.github_token }}
-        with:
-          tag_name: "v1.0.0-${{ github.run_number }}"
-          release_name: Release "v1.0.0-${{ github.run_number }}"
-          body: "Release for PR #${{ github.event.number }}"
-          draft: false
-          prerelease: false
+#   release:
+#     runs-on: ubuntu-latest
+#     needs: test
+#     steps:
+#       - uses: actions/checkout@v4
+#       - name: Pull latest
+#         run: |
+#           git config --global user.name 'StarrySkyYX'
+#           git config --global user.email 's1447891024@gmail.com'
+#           git pull
+#       - name: Tag it
+#         run: |
+#           git tag -a "v1.0.0-${{ github.run_number }}" -m "Release for PR #${{ github.event.number }}" master
+#           git push --tags
+#       - name: Release
+#         uses: actions/create-release@v1
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.github_token }}
+#         with:
+#           tag_name: "v1.0.0-${{ github.run_number }}"
+#           release_name: Release "v1.0.0-${{ github.run_number }}"
+#           body: "Release for PR #${{ github.event.number }}"
+#           draft: false
+#           prerelease: false
