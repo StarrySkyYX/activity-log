@@ -1,7 +1,7 @@
 name: auto_build_and_release
 
 on:
-  pull_request: # Automatically trigger workflow on PR creation or update
+  push: 
     branches: main
     types: [opened, reopened, synchronize] 
     
