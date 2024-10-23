@@ -124,7 +124,7 @@ async function fetchAndFilterEvents() {
     const totalFetchedEvents = allEvents.length;
 
     if (fetchedEventCount < eventLimit) {
-        core.warning(`⚠️ Only ${fetchedEventCount} events met the criteria. ${totalFetchedEvents - fetchedEventCount} events were skipped due to filters.`);
+        core.warning(`⚠️Warning: Only ${fetchedEventCount} events met the criteria. ${totalFetchedEvents - fetchedEventCount} events were skipped due to filters.`);
     }
 
     // Generate ordered list of events with descriptions
